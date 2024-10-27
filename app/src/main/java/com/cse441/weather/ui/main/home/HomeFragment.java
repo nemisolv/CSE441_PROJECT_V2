@@ -25,6 +25,7 @@ import com.cse441.weather.data.model.hourly.PreviewHourlyForecast;
 import com.cse441.weather.data.model.ingradients.AirAndPollen;
 import com.cse441.weather.data.model.ingradients.DailyForecast;
 import com.cse441.weather.databinding.FragmentHomeBinding;
+import com.cse441.weather.dto.ShortWeatherExchange;
 import com.cse441.weather.ui.favorite_location.AddFavoriteLocationActivity;
 import com.cse441.weather.ui.main.HourlyAdapter;
 import com.cse441.weather.ui.main.WeatherViewModel;
@@ -47,6 +48,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView hourlyForecastRecyclerView;
     private HourlyAdapter hourlyAdapter;
 
+    public static ShortWeatherExchange weatherExchange;
+
     ImageView imgAddToFavorite, imgWeatherIcon;
     TextView txtLocationName, txtTemperature, txtTime, txtUV, txtRainProbability,
             txtAQ, txtAQDescription, txtWindSpeed, txtSunrise, txtSunset;
@@ -55,8 +58,6 @@ public class HomeFragment extends Fragment {
     @SuppressLint("NotifyDataSetChanged")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -131,6 +132,14 @@ public class HomeFragment extends Fragment {
         txtSunrise.setText(sdf.format(sunriseDate));
         txtSunset.setText(sdf.format(sunsetDate));
         imgWeatherIcon.setImageResource(WeatherUtils.mappingWeatherIcon(dailyForecast.getDay().getIcon()));
+
+        weatherExchange = new ShortWeatherExchange(
+                location.getName(),
+                location.getKey(),
+                dailyForecast.getTemperature().getMaximum().getValue(),
+                dailyForecast.getDay().getIcon()
+
+        );
     }
 
     private void setupViews() {

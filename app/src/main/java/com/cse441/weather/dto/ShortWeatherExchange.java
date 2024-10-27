@@ -8,6 +8,13 @@ public class ShortWeatherExchange implements Serializable {
     private int temperature;
     private int icon;
 
+    public ShortWeatherExchange(String locationName, String locationKey, int temperature, int icon) {
+        this.locationName = locationName;
+        this.locationKey = locationKey;
+        this.temperature = temperature;
+        this.icon = icon;
+    }
+
     public String getLocationName() {
         return locationName;
     }

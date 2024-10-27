@@ -34,7 +34,7 @@ public class SignUpFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
 
-        TextInputEditText nameEditText = view.findViewById(R.id.nameEditText); // Thay đổi tên biến
+        TextInputEditText nameEditText = view.findViewById(R.id.nameEditText);
         TextInputEditText emailEditText = view.findViewById(R.id.emailEditText);
         TextInputEditText passwordEditText = view.findViewById(R.id.passwordEditText);
         Button signUpButton = view.findViewById(R.id.signUpButton);
@@ -42,9 +42,30 @@ public class SignUpFragment extends Fragment {
 
         // Gọi API khi nhấn Sign Up
         signUpButton.setOnClickListener(v -> {
-            String name = nameEditText.getText().toString(); // Thay đổi từ username thành name
-            String email = emailEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
+            String name = nameEditText.getText().toString().trim();
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+
+            if (name.isEmpty()) {
+                Toast.makeText(getContext(), "Name is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (email.isEmpty()) {
+                Toast.makeText(getContext(), "Email is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(getContext(), "Invalid email format", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (password.isEmpty()) {
+                Toast.makeText(getContext(), "Password is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             viewModel.signUpUser(name, email, password);
         });
 

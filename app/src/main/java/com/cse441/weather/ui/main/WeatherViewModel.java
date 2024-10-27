@@ -48,6 +48,10 @@ public class WeatherViewModel extends ViewModel {
         return hourlyForecast;
     }
 
+    public  WeatherViewModel getWeatherViewModel() {
+        return this;
+    }
+
     public void fetchWeatherData() {
         GeoPosition coordinates = getLocationFromPreferences();
         if (coordinates != null) {

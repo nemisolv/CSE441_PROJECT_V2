@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_favorite_locations"
         android:name="com.cse441.weather.ui.main.favorite_location.FavoriteLocationFragment"
         android:label="@string/menu_favorite_locations"
         tools:layout="@layout/fragment_favorite_location" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.cse441.weather.ui.main.slideshow.SlideshowFragment"
-        android:label="@string/menu_favorite_locations"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_next_days"
+        android:name="com.cse441.weather.ui.main.next_weather.NextWeatherFragment"
+        android:label="@string/menu_next_days"
+        tools:layout="@layout/fragment_next_weather" />
 </navigation>

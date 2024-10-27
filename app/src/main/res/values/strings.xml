@@ -8,6 +8,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
+    <string name="menu_next_days">See 5 next days</string>
+
     <string name="menu_favorite_locations">Your Favorite Locations</string>
     <string name="menu_logout">Logout</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>

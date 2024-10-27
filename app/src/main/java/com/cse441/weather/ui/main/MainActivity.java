@@ -1,31 +1,30 @@
 package com.cse441.weather.ui.main;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cse441.weather.R;
-import com.cse441.weather.data.model.GeoPosition;
+import com.cse441.weather.receiver.AlarmReceiver;
 import com.cse441.weather.ui.search.SearchActivity;
 import com.cse441.weather.utils.Constants;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -37,7 +36,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cse441.weather.databinding.ActivityMainBinding;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1001;
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_favorite_locations, R.id.nav_next_days)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -86,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
             getLastKnownLocation();
         }
 
+        // Kiểm tra quyền POST_NOTIFICATIONS trước khi bật thông báo
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_POST_NOTIFICATIONS);
+        } else {
+            setDailyWeatherNotification();
+        }
+
+
+
+
         // Observe locationFetched LiveData
         locationFetched.observe(this, fetched -> {
             if (fetched) {
@@ -93,6 +105,22 @@ public class MainActivity extends AppCompatActivity {
                 weatherViewModel.fetchWeatherData();
             }
         });
+//        navigationView.setNavigationItemSelectedListener( item -> {
+//            int id = item.getItemId();
+//            if (id == R.id.nav_home) {
+//                // Handle the home action
+//            } else if (id == R.id.nav_next_days) {
+//
+//            } else if (id == R.id.nav_gallery) {
+//                // Handle the gallery action
+//            } else if (id == R.id.nav_slideshow) {
+//                // Handle the slideshow action
+//            }
+//            drawer.closeDrawer(GravityCompat.START);
+//            return true;
+//        });
+
+
 
     }
 
@@ -115,6 +143,38 @@ public class MainActivity extends AppCompatActivity {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setDailyWeatherNotification();
+            } else {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+                    // Hiển thị hộp thoại yêu cầu người dùng bật quyền trong Cài đặt
+                    showPermissionSettingsDialog();
+                } else {
+                    Toast.makeText(this, "Không thể thiết lập thông báo vì quyền bị từ chối.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+    private void showPermissionSettingsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Yêu cầu quyền thông báo")
+                .setMessage("Ứng dụng cần quyền thông báo để gửi thông tin thời tiết. Vui lòng cấp quyền trong Cài đặt.")
+                .setPositiveButton("Đi đến Cài đặt", (dialog, which) -> {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+
 
 
     private void saveLocationToPreferences(double latitude, double longitude) {
@@ -158,7 +218,25 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+//
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_home) {
+//            // Handle the home action
+//        } else if (id == R.id.nav_next_days) {
+//            // Handle the next days action
+//        } else if (id == R.id.nav_gallery) {
+//            // Handle the gallery action
+//        } else if (id == R.id.nav_slideshow) {
+//            // Handle the slideshow action
+//        }
+//
+//        DrawerLayout drawer = binding.drawerLayout;
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
 
 
@@ -180,4 +258,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void setDailyWeatherNotification() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        // Dữ liệu thời tiết có thể lấy từ ViewModel hoặc API
+        intent.putExtra("weatherInfo", "Trời nắng, nhiệt độ 25°C"); // Thay thế bằng dữ liệu thực tế
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 4);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        // Đặt báo thức lặp lại hàng ngày
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkLocationPermissions()) {
+            getLastKnownLocation();
+        }
+    }
 }

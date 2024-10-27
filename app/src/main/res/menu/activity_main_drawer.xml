@@ -8,12 +8,17 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
+
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_next_days"
+            android:icon="@drawable/ic_moving"
+            android:title="@string/menu_next_days" />
+        <item
+            android:id="@+id/nav_favorite_locations"
             android:icon="@drawable/ic_menu_favorite"
             android:title="@string/menu_favorite_locations" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout"
             android:title="@string/menu_logout" />
     </group>
