@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/weather_widget_delete"
+    android:layout_height="wrap_content">
+
+    <!-- Background for the entire widget -->
+
+    <!-- Temperature Text -->
+    <ImageView
+        android:id="@+id/img_background"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_rec_item" />
+
+    <TextView
+        android:id="@+id/txt_temperature_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:text="19°"
+        android:textColor="#FFFFFFFF"
+        android:textSize="62sp" />
+
+    <!-- Location and Weather Condition Texts -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="44dp"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/txt_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nam Dinh"
+            android:gravity="left"
+            android:layout_marginLeft="20dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16sp" /> <!-- Allows this TextView to take available space -->
+
+        <TextView
+            android:id="@+id/txt_weather_condition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:text="Sunshower"
+            android:gravity="right"
+            android:textColor="#FFDADADA"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- Weather Icon -->
+    <ImageView
+        android:id="@+id/img_weather_icon"
+        android:layout_width="160dp"
+        android:layout_height="120dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="30dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_thunderstorm" />
+
+</FrameLayout>

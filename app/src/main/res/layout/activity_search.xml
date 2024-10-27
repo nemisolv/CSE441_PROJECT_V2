@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rounded_bg_white"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <!-- SearchView for Location Search -->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchViewLocation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:queryHint="@string/search_location_hint"
+            app:iconifiedByDefault="false"
+            tools:ignore="HardcodedText,RtlHardcoded" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerNeighbourhoodRegions"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/searchViewLocation"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="16dp"
+        android:scrollbars="horizontal"
+        tools:ignore="NotSibling" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerKeywordSuggestions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchViewLocation"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        tools:ignore="NotSibling" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recyclerKeywordSuggestions"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:weightSum="3"> <!-- Positioning below the keyword suggestions -->
+
+        <!-- Location list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSearchLocationItem"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="80dp"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recyclerSearchLocationItem"
+        android:layout_marginTop="120dp"
+        android:orientation="vertical"
+        tools:ignore="NotSibling"> <!-- Positioning below the badge suggestions -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTopCities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            tools:listitem="@layout/weather_location_item" />
+    </LinearLayout>
+
+</RelativeLayout>
