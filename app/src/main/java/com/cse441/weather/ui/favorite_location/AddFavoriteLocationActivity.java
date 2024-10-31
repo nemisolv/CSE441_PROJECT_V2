@@ -36,6 +36,8 @@ public class AddFavoriteLocationActivity extends AppCompatActivity {
             navigateToSignIn();
             finish();
 
+        }else {
+
         }
 
 
