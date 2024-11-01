@@ -50,6 +50,8 @@ public class HomeFragment extends Fragment {
 
     public static ShortWeatherExchange weatherExchange;
 
+
+
     ImageView imgAddToFavorite, imgWeatherIcon;
     TextView txtLocationName, txtTemperature, txtTime, txtUV, txtRainProbability,
             txtAQ, txtAQDescription, txtWindSpeed, txtSunrise, txtSunset;
@@ -74,6 +76,7 @@ public class HomeFragment extends Fragment {
 
         imgAddToFavorite.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), AddFavoriteLocationActivity.class);
+            intent.putExtra("location", location);
             startActivity(intent);
         });
 

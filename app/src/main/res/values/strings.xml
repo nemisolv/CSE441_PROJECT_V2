@@ -11,6 +11,7 @@
     <string name="menu_next_days">See 5 next days</string>
 
     <string name="menu_favorite_locations">Your Favorite Locations</string>
+    <string name="menu_notifications">Notification manager</string>
     <string name="menu_logout">Logout</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>
     <string name="prompt_email">Email</string>

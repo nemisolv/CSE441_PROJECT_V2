@@ -1,25 +1,20 @@
-package com.cse441.weather.data.model;
+package com.cse441.weather.dto;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Location implements Serializable {
+public class LocationExchange implements Serializable {
 
-    @SerializedName("Key")
     private String key;
 
-    @SerializedName("LocalizedName")
     private String name;
 
 
-    // optional (no mapping from JSON)
     private String temperature;
 
-    @SerializedName("Country")
     private Country country;
 
-    @SerializedName("userId")
     private String userId;
 
     public String getTemperature() {
@@ -39,11 +34,11 @@ public class Location implements Serializable {
     }
 
     // Constructor
-    public Location() {
+    public LocationExchange() {
 
     }
 
-    public Location(String key, String name, Country country) {
+    public LocationExchange(String key, String name, Country country) {
         this.key = key;
         this.name = name;
         this.country = country;
@@ -85,6 +80,8 @@ public class Location implements Serializable {
 
     // Nested class for country data
     public static class Country implements Serializable {
+
+        public Country() {}
 
         public Country(String id) {
             this.id = id;

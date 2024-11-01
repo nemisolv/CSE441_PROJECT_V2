@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cse441.weather.R;
+import com.cse441.weather.ui.favorite_location.AddFavoriteLocationActivity;
 import com.cse441.weather.ui.main.MainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -67,20 +68,8 @@ public class SignInFragment extends Fragment {
         viewModel.getSignInStatus().observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
                 Toast.makeText(getContext(), "Sign in successful!", Toast.LENGTH_SHORT).show();
-                Intent intent = getActivity().getIntent();
-                String redirect = intent.getStringExtra("redirect_to");
-                if (redirect != null) {
-                    getActivity().finish();
-                    try {
-                        startActivity(new Intent(getContext(), Class.forName(redirect)));
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                startActivity(new Intent(getContext(), AddFavoriteLocationActivity.class));
 
-                    }
-                } else {
-                    Intent intent1 = new Intent(getContext(), MainActivity.class);
-                    startActivity(intent1);
-                }
 
             } else {
                 Toast.makeText(getContext(), "Sign in failed: " + result.getError().getMessage(), Toast.LENGTH_SHORT).show();

@@ -24,5 +24,12 @@
     <color name="dark_purple">#3d1e6d </color>
     <color name="purple_linear_top">#3E2D8F</color>
     <color name="purple_linear_bottom">#9D52AC</color>
+
+
+
+    <!-- Complementary Colors for UI Elements -->
+    <color name="purple_light">#6B4EA3</color>  <!-- Lightened shade for button backgrounds -->
+    <color name="purple_dark">#2A1F65</color>   <!-- Darkened shade for text or borders -->
+    <color name="purple_text">#FFFFFF</color>   <!-- White text for readability -->
 </resources>
 

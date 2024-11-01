@@ -77,7 +77,7 @@ public class LocationCityItemAdapter extends RecyclerView.Adapter<LocationCityIt
             mItemView = itemView;
 
             mTextTemperature = itemView.findViewById(R.id.txt_temperature_current);
-            mTextLocation = itemView.findViewById(R.id.txt_location);
+            mTextLocation = itemView.findViewById(R.id.txt_location_item);
             mTextWeatherCondition = itemView.findViewById(R.id.txt_weather_condition);
             mImageWeatherIcon = itemView.findViewById(R.id.img_weather_icon);
             mImageWeatherIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);

@@ -9,8 +9,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -48,8 +46,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.cse441.weather.receiver.AlarmReceiver"
+        <receiver android:name="com.cse441.weather.broadcast.AlarmReceiver"
             tools:ignore="WrongManifestParent" />
+
     </application>
 
 </manifest>

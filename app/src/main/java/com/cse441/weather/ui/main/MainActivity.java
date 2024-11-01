@@ -1,9 +1,6 @@
 package com.cse441.weather.ui.main;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,11 +10,11 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cse441.weather.R;
-import com.cse441.weather.receiver.AlarmReceiver;
 import com.cse441.weather.ui.search.SearchActivity;
 import com.cse441.weather.utils.Constants;
 import com.google.android.material.navigation.NavigationView;
@@ -25,6 +22,7 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -35,10 +33,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cse441.weather.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Calendar;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1001;
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_favorite_locations, R.id.nav_next_days)
+                R.id.nav_home, R.id.nav_favorite_locations, R.id.nav_next_days, R.id.nav_notifications)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -92,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_POST_NOTIFICATIONS);
         } else {
-            setDailyWeatherNotification();
+//            setDailyWeatherNotification();
         }
 
 
@@ -105,24 +102,17 @@ public class MainActivity extends AppCompatActivity {
                 weatherViewModel.fetchWeatherData();
             }
         });
-//        navigationView.setNavigationItemSelectedListener( item -> {
-//            int id = item.getItemId();
-//            if (id == R.id.nav_home) {
-//                // Handle the home action
-//            } else if (id == R.id.nav_next_days) {
-//
-//            } else if (id == R.id.nav_gallery) {
-//                // Handle the gallery action
-//            } else if (id == R.id.nav_slideshow) {
-//                // Handle the slideshow action
-//            }
-//            drawer.closeDrawer(GravityCompat.START);
-//            return true;
-//        });
+
+
+
+
 
 
 
     }
+
+
+
 
     private boolean checkLocationPermissions() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -150,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                setDailyWeatherNotification();
+//                setDailyWeatherNotification();
             } else {
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
                     // Hiển thị hộp thoại yêu cầu người dùng bật quyền trong Cài đặt
@@ -211,38 +201,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-//
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_home) {
-//            // Handle the home action
-//        } else if (id == R.id.nav_next_days) {
-//            // Handle the next days action
-//        } else if (id == R.id.nav_gallery) {
-//            // Handle the gallery action
-//        } else if (id == R.id.nav_slideshow) {
-//            // Handle the slideshow action
-//        }
-//
-//        DrawerLayout drawer = binding.drawerLayout;
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
-
-
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -258,24 +216,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setDailyWeatherNotification() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-
-        // Dữ liệu thời tiết có thể lấy từ ViewModel hoặc API
-        intent.putExtra("weatherInfo", "Trời nắng, nhiệt độ 25°C"); // Thay thế bằng dữ liệu thực tế
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-
-        // Đặt báo thức lặp lại hàng ngày
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
 
     @Override
     protected void onResume() {
@@ -283,5 +223,22 @@ public class MainActivity extends AppCompatActivity {
         if (checkLocationPermissions()) {
             getLastKnownLocation();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_logout) {
+            // Handle the logout action
+            FirebaseAuth.getInstance().signOut();
+            return true;
+        }
+
+        // Handle other menu item clicks here
+        DrawerLayout drawer = binding.drawerLayout;
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 }

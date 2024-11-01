@@ -6,6 +6,8 @@ public class DayNight {
 
     @SerializedName("Icon")
     private int icon;
+    @SerializedName("IconPhrase")
+    private String iconPhrase;
 
 
     @SerializedName("HasPrecipitation")
@@ -49,7 +51,13 @@ public class DayNight {
         this.icon = icon;
     }
 
+    public String getIconPhrase() {
+        return iconPhrase;
+    }
 
+    public void setIconPhrase(String iconPhrase) {
+        this.iconPhrase = iconPhrase;
+    }
 
     public boolean isHasPrecipitation() {
         return hasPrecipitation;

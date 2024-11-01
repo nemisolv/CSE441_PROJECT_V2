@@ -1,10 +1,13 @@
 package com.cse441.weather.data.model.ingradients;
 
+import com.cse441.weather.data.model.Location;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class DailyForecast {
+
+    private Location location;
 
     @SerializedName("Date")
     private String date;
@@ -40,6 +43,8 @@ public class DailyForecast {
 
     @SerializedName("Link")
     private String link;
+
+
 
     // Getters and setters
     public String getDate() {
@@ -130,6 +135,14 @@ public class DailyForecast {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override

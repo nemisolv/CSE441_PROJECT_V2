@@ -22,4 +22,10 @@
         android:name="com.cse441.weather.ui.main.next_weather.NextWeatherFragment"
         android:label="@string/menu_next_days"
         tools:layout="@layout/fragment_next_weather" />
+
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.cse441.weather.ui.main.notification.NotificationFragment"
+        android:label="@string/menu_notifications"
+        tools:layout="@layout/fragment_notification" />
 </navigation>

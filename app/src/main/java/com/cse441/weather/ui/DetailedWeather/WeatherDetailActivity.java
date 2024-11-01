@@ -28,11 +28,14 @@ import com.cse441.weather.ui.main.HourlyAdapter;
 import com.cse441.weather.ui.main.WeatherViewModel;
 import com.cse441.weather.ui.main.WeatherViewModelFactory;
 import com.cse441.weather.utils.WeatherUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WeatherDetailActivity extends AppCompatActivity {
 
@@ -44,6 +47,10 @@ public class WeatherDetailActivity extends AppCompatActivity {
     ImageView imgAddToFavorite, imgWeatherIcon;
     TextView txtLocationName, txtTemperature, txtTime, txtUV, txtRainProbability,
             txtAQ, txtAQDescription, txtWindSpeed, txtSunrise, txtSunset;
+    private CollectionReference favoriteLocationsRef;
+    private List<Location> favoriteLocations ;
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class WeatherDetailActivity extends AppCompatActivity {
             return insets;
         });
 
+        mAuth = FirebaseAuth.getInstance();
+
         getSupportActionBar().hide();
         setupViews();
 
@@ -67,6 +76,23 @@ public class WeatherDetailActivity extends AppCompatActivity {
             weatherViewModel.fetchWeatherData();
         }
 
+        if(mAuth.getCurrentUser() != null){
+            favoriteLocationsRef.whereEqualTo("userId", mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(queryDocumentSnapshots -> {
+                List<Location> locations = queryDocumentSnapshots.toObjects(Location.class);
+                favoriteLocations.addAll(locations);
+            });
+
+            List<String> locationKeys = favoriteLocations.stream().map(Location::getKey).collect(Collectors.toList());
+            if(locationKeys.contains(location.getKey())){
+                imgAddToFavorite.setVisibility(View.GONE);
+            }
+
+
+
+        }
+
+
+
         hourlyAdapter = new HourlyAdapter(new ArrayList<>(0));
         hourlyForecastRecyclerView.setAdapter(hourlyAdapter);
         hourlyForecastRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -75,6 +101,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
 
         imgAddToFavorite.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddFavoriteLocationActivity.class);
+            intent.putExtra("location", location);
             startActivity(intent);
         });
 

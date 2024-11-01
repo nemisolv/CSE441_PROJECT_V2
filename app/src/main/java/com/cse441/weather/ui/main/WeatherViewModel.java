@@ -3,6 +3,7 @@ package com.cse441.weather.ui.main;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -13,8 +14,10 @@ import com.cse441.weather.data.model.GeoPosition;
 import com.cse441.weather.data.model.Location;
 import com.cse441.weather.data.model.WeatherForecast;
 import com.cse441.weather.data.model.hourly.PreviewHourlyForecast;
+import com.cse441.weather.data.model.ingradients.DailyForecast;
 import com.cse441.weather.data.source.AccuWeatherDataSource;
 import com.cse441.weather.data.source.WeatherDataSource;
+import com.cse441.weather.dto.NotificationWeatherForecastOverview;
 
 import java.util.List;
 
@@ -52,6 +55,16 @@ public class WeatherViewModel extends ViewModel {
         return this;
     }
 
+    public  void storeTemporaryNotificationInfo() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("notification_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        DailyForecast dailyForecast = currentWeather.getValue().getDailyForecasts().get(0);
+        editor.putString("textDay", dailyForecast.getDay().getShortPhrase());
+        editor.putString("textNight", dailyForecast.getNight().getShortPhrase());
+        editor.putInt("temperature", dailyForecast.getTemperature().getMaximum().getValue());
+        editor.apply();
+    }
+
     public void fetchWeatherData() {
         GeoPosition coordinates = getLocationFromPreferences();
         if (coordinates != null) {
@@ -69,6 +82,7 @@ public class WeatherViewModel extends ViewModel {
                             public void onResponse(@NonNull Call<WeatherForecast> call, @NonNull Response<WeatherForecast> response) {
                                 if (response.isSuccessful()) {
                                     currentWeather.setValue(response.body());
+                                    storeTemporaryNotificationInfo();
                                 }
                             }
 
