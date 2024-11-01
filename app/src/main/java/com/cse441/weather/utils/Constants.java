@@ -2,7 +2,7 @@ package com.cse441.weather.utils;
 
 public class Constants {
     public static final String BASE_URL_API = "http://dataservice.accuweather.com";
-    public static final String API_KEY = "r3ZRnGKZAjVUmi2IP0VSfIIfFVeKiXwM";
+    public static final String API_KEY = "2fX5Wrs6CNJ8xbfGUjIrjvkd5ZvpSmyI";
 
     public static final String PREFS_NAME = "WeatherAppPrefs";  // Name of the SharedPreferences file
 
